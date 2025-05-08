@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000',
@@ -27,10 +27,11 @@ export async function runAnalysis(code: string, model?: string): Promise<Analysi
     const response = await apiClient.post('/analysis/run', payload);
     return response.data.result as AnalysisResult;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw error.response?.data?.detail || 'Analysis failed';
+    if (error && typeof error === 'object' && error !== null && 'response' in error) {
+      // @ts-expect-error: error type is not guaranteed to be AxiosError
+      throw new Error(error.response?.data?.detail || 'Analysis failed');
     }
-    throw 'Analysis failed';
+    throw new Error('Analysis failed');
   }
 }
 
@@ -44,10 +45,11 @@ export async function cloneRepo(url: string): Promise<CloneResult> {
     const response = await apiClient.post('/git/clone', { url });
     return response.data.result as CloneResult;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw error.response?.data?.detail || 'Git clone failed';
+    if (error && typeof error === 'object' && error !== null && 'response' in error) {
+      // @ts-expect-error: error type is not guaranteed to be AxiosError
+      throw new Error(error.response?.data?.detail || 'Git clone failed');
     }
-    throw 'Git clone failed';
+    throw new Error('Git clone failed');
   }
 }
 
@@ -60,10 +62,11 @@ export async function listModels(): Promise<string[]> {
     const response = await apiClient.get('/models/list');
     return response.data.models as string[];
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw error.response?.data?.detail || 'Failed to list models';
+    if (error && typeof error === 'object' && error !== null && 'response' in error) {
+      // @ts-expect-error: error type is not guaranteed to be AxiosError
+      throw new Error(error.response?.data?.detail || 'Failed to list models');
     }
-    throw 'Failed to list models';
+    throw new Error('Failed to list models');
   }
 }
 

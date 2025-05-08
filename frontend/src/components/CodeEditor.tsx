@@ -26,7 +26,7 @@ function createPythonModel(value: string) {
 function connectToLsp() {
   const webSocket = new WebSocket(LSP_WS_URL);
   webSocket.onopen = () => {
-    const socket = toSocket(webSocket as any);
+    const socket = toSocket(webSocket as WebSocket);
     const reader = new WebSocketMessageReader(socket);
     const writer = new WebSocketMessageWriter(socket);
     const languageClient = new MonacoLanguageClient({
@@ -38,10 +38,11 @@ function connectToLsp() {
           closed: () => ({ action: CloseAction.DoNotRestart }),
         },
       },
+      // @ts-expect-error: connectionProvider is not in type definition yet
       connectionProvider: {
         get: async () => ({ reader, writer }),
       },
-    } as any); // Cast to any to allow connectionProvider for v5+
+    } as any);
     languageClient.start();
     reader.onClose(() => languageClient.stop());
   };

@@ -23,7 +23,7 @@ function createPythonModel(value: string) {
   );
 }
 
-function connectToLsp(editor: monaco.editor.IStandaloneCodeEditor) {
+function connectToLsp() {
   const webSocket = new WebSocket(LSP_WS_URL);
   webSocket.onopen = () => {
     const socket = toSocket(webSocket as any);
@@ -70,7 +70,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ value, onChange, metrics }) => 
       monacoRef.current.onDidChangeModelContent(() => {
         onChange(monacoRef.current.getValue());
       });
-      connectToLsp(monacoRef.current);
+      connectToLsp();
     }
     return () => {
       if (monacoRef.current) {

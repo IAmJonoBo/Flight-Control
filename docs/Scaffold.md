@@ -39,6 +39,7 @@ flight-control/
   npm run dev
   # Open http://localhost:5173
   ```
+- React 17+ automatic JSX runtime is enabled: you do **not** need to import `React` for JSX. ESLint is configured for this.
 
 ```bash
 frontend/

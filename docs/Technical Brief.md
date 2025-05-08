@@ -274,3 +274,4 @@ All endpoints are covered by automated tests and follow best practices for error
   ```
 - Accessibility is enforced via automated (axe-core) and manual audits.
 - See the Developer Guide and Getting Started docs for full local setup instructions.
+- React 17+ automatic JSX runtime is enabled: you do **not** need to import `React` for JSX. ESLint is configured for this.

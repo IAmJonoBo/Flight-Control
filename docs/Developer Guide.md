@@ -691,3 +691,11 @@ See the Technical Brief and infrastructure docs for more details and best practi
 - **LSP/Monaco integration:**
   - Ensure the Python LSP server is running (`pylsp --ws --port 5007`).
   - See Monaco section for details.
+
+### ⚛️ React 17+ Automatic JSX Runtime
+- The frontend uses React 17+ with the new automatic JSX runtime.
+- You do **not** need to import `React` in every file that uses JSX.
+- ESLint is configured to disable the `react/react-in-jsx-scope` rule.
+- If you see errors about 'React must be in scope when using JSX', ensure:
+  - You are using React 17+.
+  - `.eslintrc.js` has `'react/react-in-jsx-scope': 'off'` in `rules`.

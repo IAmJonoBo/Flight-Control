@@ -38,7 +38,6 @@ function connectToLsp() {
           closed: () => ({ action: CloseAction.DoNotRestart }),
         },
       },
-      // @ts-expect-error: connectionProvider is not in type definition yet
       connectionProvider: {
         get: async () => ({ reader, writer }),
       },

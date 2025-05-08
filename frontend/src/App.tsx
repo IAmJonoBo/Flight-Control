@@ -60,7 +60,8 @@ const App = () => {
         success: 'Thank you for your feedback!',
         error: {
           render({ data }) {
-            return data?.detail || data?.toString() || 'Submission failed';
+            const detail = typeof data === 'object' && data !== null && 'detail' in data ? (data as any).detail : undefined;
+            return detail || data?.toString() || 'Submission failed';
           },
         },
       },

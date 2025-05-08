@@ -12,6 +12,8 @@ module.exports = {
   settings: {
     react: {
       version: 'detect',
+      pragma: 'React',
+      jsxPragma: 'React',
     },
   },
   env: {
@@ -33,5 +35,6 @@ module.exports = {
   ],
   rules: {
     // Add or override rules as needed
+    'react/react-in-jsx-scope': 'off',
   },
 };

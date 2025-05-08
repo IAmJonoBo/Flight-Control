@@ -1,3 +1,4 @@
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
@@ -9,7 +10,7 @@ const SENTRY_DSN = import.meta.env.VITE_SENTRY_DSN;
 if (SENTRY_DSN) {
   Sentry.init({
     dsn: SENTRY_DSN,
-    integrations: [new BrowserTracing()],
+    integrations: [new (BrowserTracing as any)()],
     tracesSampleRate: 0.1,
   });
 }

@@ -13,6 +13,7 @@ import { useState, useCallback, useEffect } from 'react';
 const App = () => {
   const [feedbackOpen, setFeedbackOpen] = useState(false);
   const [networkError, setNetworkError] = useState(false);
+  const [selectedModel, setSelectedModel] = useState<string>('');
 
   // Keyboard shortcut: Ctrl+Shift+F
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
@@ -46,7 +47,8 @@ const App = () => {
       }).then(async (res) => {
         if (!res.ok) {
           const err = await res.json().catch(() => ({}));
-          throw new Error(err.detail || 'Submission failed');
+          const detail = typeof err === 'object' && err !== null && 'detail' in err ? (err as any).detail : undefined;
+          throw new Error(detail || 'Submission failed');
         }
         return res.json();
       }).catch((err) => {
@@ -77,7 +79,7 @@ const App = () => {
       <div className={networkError ? 'pt-10' : ''}>
         <Routes>
           <Route path="/" element={<Dashboard />} />
-          <Route path="/settings" element={<Settings />} />
+          <Route path="/settings" element={<Settings selectedModel={selectedModel} onModelChange={setSelectedModel} />} />
           <Route path="/login" element={<Login />} />
           <Route path="/docs" element={<DocsPortal />} />
         </Routes>

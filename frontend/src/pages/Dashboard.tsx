@@ -20,7 +20,7 @@ function debounce<T extends (...args: any[]) => void>(fn: T, delay: number) {
 const Dashboard = () => {
   const [code, setCode] = useState(initialCode);
   const [repoUrl, setRepoUrl] = useState('');
-  const { models, loading: modelsLoading, fetchModels } = useModels();
+  const { models, fetchModels } = useModels();
   const [selectedModel, setSelectedModel] = useState<string>('');
   const { result: gitResult, loading: gitLoading, error: gitError, clone } = useGit();
   const { result: analysisResult, loading: analysisLoading, error: analysisError, analyze } = useAnalysis();

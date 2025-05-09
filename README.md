@@ -44,12 +44,12 @@ flight-control/
 
 ## 📚 Documentation
 
-- [Vision & Overview](./VISION.md)
-- [Milestones & Phases](./MILESTONES.md)
-- [Key Deliverables](./DELIVERABLES.md)
-- [Review & Update Process](./REVIEW_PROCESS.md)
-- [Next Steps](./NEXT_STEPS.md)
-- [Enhancements & Suggestions](./ENHANCEMENTS.md)
+- [Vision & Overview](./docs/src/docs/vision.md)
+- [Milestones & Phases](./docs/src/docs/milestones.md)
+- [Key Deliverables](./docs/src/docs/deliverables.md)
+- [Review & Update Process](./docs/src/docs/review-process.md)
+- [Next Steps](./docs/src/docs/next-steps.md)
+- [Enhancements & Suggestions](./docs/src/docs/enhancements.md)
 - [Getting Started](./docs/src/docs/getting-started.md)
 - [API Reference](./docs/src/docs/api-reference.md)
 - [Security Guide](./docs/src/docs/security.md)
@@ -83,7 +83,7 @@ flight-control/
 ## 🤝 Contributing
 - See [Contributing](./CONTRIBUTING.md)
 - All PRs require tests, docs, and code review
-- Roadmap and future enhancements in [Enhancements & Suggestions](./ENHANCEMENTS.md)
+- Roadmap and future enhancements in [Enhancements & Suggestions](./docs/src/docs/enhancements.md)
 
 ---
 
@@ -93,4 +93,4 @@ flight-control/
 
 ---
 
-> See the [Getting Started](./docs/src/docs/getting-started.md) and [Vision & Overview](./VISION.md) for full onboarding, automation, and best practices.
+> See the [Getting Started](./docs/src/docs/getting-started.md) and [Vision & Overview](./docs/src/docs/vision.md) for full onboarding, automation, and best practices.

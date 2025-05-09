@@ -1,0 +1,44 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.13.3, pytest-8.3.5, pluggy-1.5.0
+rootdir: /Users/jonathanbotha/Projects/Flight Control
+plugins: anyio-4.9.0, cov-6.1.1
+collected 21 items
+
+backend/app/tests/test_analysis_service.py .....                         [ 23%]
+backend/app/tests/test_feedback_service.py .......                       [ 57%]
+backend/app/tests/test_git_service.py ....                               [ 76%]
+backend/app/tests/test_health.py .                                       [ 80%]
+backend/app/tests/test_model_service.py ....                             [100%]
+
+================================ tests coverage ================================
+_______________ coverage: platform darwin, python 3.13.3-final-0 _______________
+
+Name                                         Stmts   Miss  Cover   Missing
+--------------------------------------------------------------------------
+backend/app/__init__.py                          0      0   100%
+backend/app/config.py                           48     32    33%   24-48, 52-55, 59-60, 64-69
+backend/app/database.py                          6      0   100%
+backend/app/main.py                             18      2    89%   19-20
+backend/app/models/__init__.py                   0      0   100%
+backend/app/models/code_smell.py                10     10     0%   1-12
+backend/app/models/user.py                      11      0   100%
+backend/app/routes/__init__.py                   7      0   100%
+backend/app/routes/analysis.py                  16     10    38%   10-22
+backend/app/routes/auth.py                      92     61    34%   17-21, 24, 42-71, 75-113, 117-132
+backend/app/routes/feedback.py                  34     22    35%   41-78
+backend/app/routes/git.py                       14      5    64%   20-24
+backend/app/routes/health.py                     6      0   100%
+backend/app/routes/models.py                     8      2    75%   15-24
+backend/app/services/__init__.py                 0      0   100%
+backend/app/services/analysis_service.py        26      0   100%
+backend/app/services/feedback_service.py        41      0   100%
+backend/app/services/git_service.py             20      0   100%
+backend/app/services/model_service.py           19      0   100%
+backend/app/tests/test_analysis_service.py      41      2    95%   34, 47
+backend/app/tests/test_feedback_service.py      41      0   100%
+backend/app/tests/test_git_service.py           20      0   100%
+backend/app/tests/test_health.py                 7      0   100%
+backend/app/tests/test_model_service.py         27      0   100%
+--------------------------------------------------------------------------
+TOTAL                                          512    146    71%
+============================== 21 passed in 1.25s ==============================

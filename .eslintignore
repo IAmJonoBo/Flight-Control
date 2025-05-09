@@ -1,0 +1,12 @@
+__mocks__/
+coverage/
+*.config.js
+*.config.cjs
+*.config.mjs
+*.test.js
+*.test.ts
+*.test.tsx
+babel.config.js
+tailwind.config.js
+vite.config.ts
+jest.setup.js

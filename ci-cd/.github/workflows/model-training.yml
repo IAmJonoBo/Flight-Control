@@ -1,0 +1,34 @@
+name: Model Training
+on:
+  workflow_dispatch:
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10
+      - run: pip install -r ai-ml/requirements.txt
+      - run: python ai-ml/models/graphcodebert/train.py
+      - name: Save model artifacts
+        run: |
+          mkdir -p artifacts
+          cp -r ai-ml/results/* artifacts/ || true
+      # Upload artifacts to S3/MinIO (requires credentials in secrets)
+      - name: Upload artifacts to S3
+        if: success()
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: us-east-1
+        run: |
+          if [ -d artifacts ]; then
+            aws s3 cp artifacts/ s3://flight-control-model-artifacts/ --recursive
+          else
+            echo "No artifacts to upload."
+          fi
+      # Notify on completion (GitHub Actions summary)
+      - name: Post summary
+        run: echo "## Model training complete! Artifacts uploaded to S3." >> $GITHUB_STEP_SUMMARY

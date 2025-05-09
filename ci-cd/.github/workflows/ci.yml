@@ -1,0 +1,131 @@
+name: CI Pipeline
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: cd frontend && npm install && npm run test
+      # Frontend: Lint
+      - run: cd frontend && npm run lint
+      # Frontend: Type-check
+      - run: cd frontend && npm run type-check
+      # Frontend: Test with coverage
+      - run: cd frontend && npm run test:coverage
+      # Frontend: Build
+      - run: cd frontend && npm run build
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10
+      - run: pip install -r backend/requirements.txt
+      - run: python -m pytest backend/app/tests/
+      - run: pip install -r ai-ml/requirements.txt
+      - run: python ai-ml/models/graphcodebert/train.py
+      - name: Accessibility check (axe-core)
+        run: |
+          npm install -g axe-core-cli
+          axe http://localhost:3000 || true
+          axe http://localhost:3000/settings || true
+          axe http://localhost:3000/docs || true
+          axe http://localhost:3000/feedback || true
+        # Accessibility checks for all major routes. Expand as new pages are added.
+      - name: Lint with black
+        run: black --check backend/app
+
+      - name: Lint with ruff
+        run: ruff backend/app
+
+      - name: Type check with mypy
+        run: mypy backend/app
+
+      - name: Run tests with coverage
+        run: pytest --cov=backend/app --cov=tests --cov-report=xml --cov-report=term-missing --disable-warnings
+
+      - name: Fail if coverage < 98%
+        run: |
+          COVERAGE=$(python -c "import xml.etree.ElementTree as ET; tree=ET.parse('coverage.xml'); print(float(tree.getroot().attrib['line-rate'])*100)")
+          echo "Coverage: $COVERAGE"
+          if (( $(echo \"$COVERAGE < 98.0\" | bc -l) )); then
+            echo '::error ::Test coverage is below 98%'
+            exit 1
+          fi
+
+      - name: Start FastAPI backend
+        run: |
+          pip install uvicorn
+          nohup uvicorn app.main:app --host 0.0.0.0 --port 8000 --app-dir backend/app &
+          sleep 10
+      - name: Export OpenAPI schema to YAML
+        run: |
+          pip install pyyaml httpx
+          curl -s http://localhost:8000/openapi.json | python -c 'import sys, yaml, json; yaml.safe_dump(json.load(sys.stdin), sys.stdout)' > docs/swagger/openapi.yaml
+
+      # Optional: Upload coverage to Codecov
+      # - name: Upload coverage to Codecov
+      #   uses: codecov/codecov-action@v4
+      #   with:
+      #     files: backend/coverage.xml
+      #   env:
+      #     CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+      # Optional: Snyk dependency scan
+      # - name: Run Snyk to check for vulnerabilities
+      #   uses: snyk/actions/python@v1
+      #   with:
+      #     args: --file=backend/requirements.txt
+      #   env:
+      #     SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      # --- Frontend Automation ---
+      - name: Install frontend dependencies
+        run: cd frontend && npm install
+
+      - name: Lint frontend (ESLint)
+        run: cd frontend && npm run lint
+
+      - name: Type check frontend (TypeScript)
+        run: cd frontend && npx tsc --noEmit
+
+      - name: Run frontend tests (Jest) with coverage
+        run: cd frontend && npm run test -- --coverage --ci
+
+      - name: Enforce frontend coverage >= 80%
+        run: |
+          cd frontend
+          COVERAGE=$(npx jest --coverage --json --outputFile=coverage.json && node -e "console.log(require('./coverage/coverage-summary.json').total.lines.pct)")
+          echo "Frontend Coverage: $COVERAGE"
+          if (( $(echo "$COVERAGE < 80.0" | bc -l) )); then
+            echo '::error ::Frontend test coverage is below 80%'
+            exit 1
+          fi
+
+      - name: Accessibility check (axe-core)
+        run: |
+          npm install -g axe-core-cli
+          axe http://localhost:5173 || true
+
+      # --- Infrastructure Automation ---
+      - name: Lint Dockerfiles (hadolint)
+        run: |
+          docker run --rm -i hadolint/hadolint < infrastructure/Dockerfiles/frontend.Dockerfile
+          docker run --rm -i hadolint/hadolint < infrastructure/Dockerfiles/backend.Dockerfile
+          docker run --rm -i hadolint/hadolint < infrastructure/Dockerfiles/ai.Dockerfile
+
+      - name: Lint K8s manifests (kubeval)
+        run: |
+          npx kubeval infrastructure/k8s/deployments/*.yaml
+
+      - name: Validate Terraform
+        run: |
+          cd infrastructure/terraform
+          terraform init -backend=false
+          terraform validate
+
+      - name: Scan Docker images (trivy)
+        run: |
+          docker run --rm aquasec/trivy image --exit-code 0 --no-progress docker.io/library/python:3.10

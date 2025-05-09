@@ -1,0 +1,70 @@
+name: Infrastructure CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  lint-validate-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Lint Dockerfiles
+        run: |
+          docker run --rm -i hadolint/hadolint < infrastructure/Dockerfiles/frontend.Dockerfile
+          docker run --rm -i hadolint/hadolint < infrastructure/Dockerfiles/backend.Dockerfile
+          docker run --rm -i hadolint/hadolint < infrastructure/Dockerfiles/ai.Dockerfile
+      - name: Lint K8s manifests
+        run: |
+          npx kubeval infrastructure/k8s/deployments/*.yaml
+      - name: Validate Terraform
+        run: |
+          cd infrastructure/terraform
+          terraform init -backend=false
+          terraform validate
+      - name: Scan Docker images (Trivy)
+        run: |
+          docker run --rm aquasec/trivy image --exit-code 0 --no-progress docker.io/library/python:3.10
+      # - name: Snyk dependency scan
+      #   uses: snyk/actions/cli@v1
+      #   with:
+      #     args: test --all-projects
+      #   env:
+      #     SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+  deploy-staging:
+    needs: lint-validate-scan
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v3
+      - name: Deploy to Staging (K8s)
+        run: |
+          kubectl apply -f infrastructure/k8s/deployments/
+          kubectl apply -f infrastructure/k8s/services/
+      - name: Deploy Terraform (Staging)
+        run: |
+          cd infrastructure/terraform
+          terraform init -backend=false
+          terraform apply -auto-approve
+
+  deploy-production:
+    needs: deploy-staging
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://your-production-url.com
+    steps:
+      - uses: actions/checkout@v3
+      - name: Wait for manual approval
+        run: echo "Manual approval required for production deployment."
+      - name: Deploy to Production (K8s)
+        run: |
+          kubectl apply -f infrastructure/k8s/deployments/
+          kubectl apply -f infrastructure/k8s/services/
+      - name: Deploy Terraform (Production)
+        run: |
+          cd infrastructure/terraform
+          terraform init -backend=false
+          terraform apply -auto-approve

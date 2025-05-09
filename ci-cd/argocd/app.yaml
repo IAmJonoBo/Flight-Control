@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: flight-control
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/your-org/flight-control'
+    targetRevision: HEAD
+    path: infrastructure/k8s
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: default
+  syncPolicy:
+    automated: {}

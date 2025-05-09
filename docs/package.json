@@ -1,0 +1,14 @@
+{
+  "name": "flight-control-docs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "docusaurus start",
+    "build": "docusaurus build",
+    "swizzle": "docusaurus swizzle"
+  },
+  "dependencies": {
+    "@docusaurus/core": "^2.4.0",
+    "@docusaurus/preset-classic": "^2.4.0"
+  }
+}

@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ai
+  template:
+    metadata:
+      labels:
+        app: ai
+    spec:
+      containers:
+        - name: ai
+          image: flight-control-ai:latest
+          ports:
+            - containerPort: 9000
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "512Mi"
+            limits:
+              cpu: "1"
+              memory: "2Gi"
+          envFrom:
+            - secretRef:
+                name: backend-secret
+            - configMapRef:
+                name: backend-config
+          securityContext:
+            runAsNonRoot: true
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 9000
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 9000
+            initialDelaySeconds: 20
+            periodSeconds: 30
+# HPA should be deployed separately (see ai-hpa.yaml)
+      securityContext:
+        runAsNonRoot: true

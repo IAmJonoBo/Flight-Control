@@ -1,0 +1,5 @@
+{
+  "model_name": "graphcodebert-base",
+  "num_labels": 2,
+  "max_seq_length": 256
+}

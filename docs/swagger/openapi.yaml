@@ -1,0 +1,294 @@
+components:
+  schemas:
+    Body_submit_feedback_feedback_post:
+      properties:
+        attachment:
+          anyOf:
+          - format: binary
+            type: string
+          - type: 'null'
+          title: Attachment
+        description:
+          title: Description
+          type: string
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+        severity:
+          title: Severity
+          type: string
+        title:
+          title: Title
+          type: string
+      required:
+      - title
+      - description
+      - severity
+      title: Body_submit_feedback_feedback_post
+      type: object
+    GitCloneRequest:
+      properties:
+        url:
+          format: uri
+          maxLength: 2083
+          minLength: 1
+          title: Url
+          type: string
+      required:
+      - url
+      title: GitCloneRequest
+      type: object
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          title: Detail
+          type: array
+      title: HTTPValidationError
+      type: object
+    LoginRequest:
+      properties:
+        password:
+          title: Password
+          type: string
+        username:
+          title: Username
+          type: string
+      required:
+      - username
+      - password
+      title: LoginRequest
+      type: object
+    LoginResponse:
+      properties:
+        access_token:
+          title: Access Token
+          type: string
+        expires_in:
+          title: Expires In
+          type: integer
+        token_type:
+          default: bearer
+          title: Token Type
+          type: string
+      required:
+      - access_token
+      - expires_in
+      title: LoginResponse
+      type: object
+    RefreshResponse:
+      properties:
+        access_token:
+          title: Access Token
+          type: string
+        expires_in:
+          title: Expires In
+          type: integer
+        token_type:
+          default: bearer
+          title: Token Type
+          type: string
+      required:
+      - access_token
+      - expires_in
+      title: RefreshResponse
+      type: object
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          title: Location
+          type: array
+        msg:
+          title: Message
+          type: string
+        type:
+          title: Error Type
+          type: string
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+      type: object
+info:
+  title: Flight Control API
+  version: 0.1.0
+openapi: 3.1.0
+paths:
+  /analysis/run:
+    post:
+      operationId: run_analysis_endpoint_analysis_run_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              additionalProperties: true
+              title: Payload
+              type: object
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Run Analysis Endpoint
+  /auth/login:
+    post:
+      operationId: login_endpoint_auth_login_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Login Endpoint
+  /auth/logout:
+    post:
+      operationId: logout_endpoint_auth_logout_post
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+      summary: Logout Endpoint
+  /auth/refresh:
+    post:
+      operationId: refresh_endpoint_auth_refresh_post
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefreshResponse'
+          description: Successful Response
+      summary: Refresh Endpoint
+  /feedback:
+    post:
+      description: "Submit user feedback, optionally with an attachment. Validates\
+        \ input, uploads attachments, and creates a GitHub issue.\nArgs:\n    title\
+        \ (str): Feedback title.\n    description (str): Feedback description.\n \
+        \   severity (str): Severity level (low, medium, high, critical).\n    email\
+        \ (Optional[str]): User email.\n    attachment (Optional[UploadFile]): Optional\
+        \ file attachment.\nReturns:\n    Dict[str, Any]: Success message."
+      operationId: submit_feedback_feedback_post
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_submit_feedback_feedback_post'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                title: Response Submit Feedback Feedback Post
+                type: object
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Submit Feedback
+  /git/clone:
+    post:
+      description: "Clone a git repository to a temporary directory.\nArgs:\n    payload\
+        \ (GitCloneRequest): The request body containing the repository URL.\nReturns:\n\
+        \    Dict[str, Any]: Success or error message."
+      operationId: clone_repo_endpoint_git_clone_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GitCloneRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                title: Response Clone Repo Endpoint Git Clone Post
+                type: object
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Clone Repo Endpoint
+  /health:
+    get:
+      description: "Health check endpoint for service monitoring.\nReturns:\n    Dict[str,\
+        \ str]: Service status."
+      operationId: health_check_health_get
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  type: string
+                title: Response Health Check Health Get
+                type: object
+          description: Successful Response
+      summary: Health Check
+  /metrics:
+    get:
+      description: Endpoint that serves Prometheus metrics.
+      operationId: metrics_metrics_get
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+      summary: Metrics
+  /models/list:
+    get:
+      description: "List all available models and their metadata from the registry.\n\
+        Returns:\n    Dict[str, Any]: A dictionary containing a list of models and\
+        \ their metadata."
+      operationId: list_models_endpoint_models_list_get
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                title: Response List Models Endpoint Models List Get
+                type: object
+          description: Successful Response
+      summary: List Models Endpoint

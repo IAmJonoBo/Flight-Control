@@ -1,0 +1,6 @@
+torch>=2.0
+transformers>=4.33
+datasets>=2.14
+peft>=0.4.0
+# codebert-score>=0.1  # Temporarily commented out: not available on PyPI
+semgrep  # CLI, for validation

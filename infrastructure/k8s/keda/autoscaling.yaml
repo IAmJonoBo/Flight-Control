@@ -1,0 +1,12 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: flight-control-backend
+spec:
+  scaleTargetRef:
+    name: backend
+  triggers:
+    - type: cpu
+      metadata:
+        type: Utilization
+        value: "50"

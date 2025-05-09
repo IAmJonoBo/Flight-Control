@@ -1,0 +1,217 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.13.3, pytest-8.3.5, pluggy-1.5.0
+rootdir: /Users/jonathanbotha/Projects/Flight Control
+plugins: anyio-4.9.0, cov-6.1.1
+collected 11 items
+
+tests/backend/test_analysis.py F..
+tests/backend/test_feedback.py F....
+tests/backend/test_git.py Fs
+tests/backend/test_models.py .
+
+=================================== FAILURES ===================================
+_____________________________ test_analysis_valid ______________________________
+
+    def test_analysis_valid():
+        client = TestClient(app)
+        response = client.post("/analysis/run", json={"code": "def foo(): pass"})
+>       assert response.status_code == 200
+E       assert 400 == 200
+E        +  where 400 = <Response [400 Bad Request]>.status_code
+
+tests/backend/test_analysis.py:7: AssertionError
+------------------------------ Captured log call -------------------------------
+ERROR    model_service:model_service.py:51 Failed to load model 'graphcodebert' from 'ai-ml.models.graphcodebert.inference': There was a specific connection error when trying to load microsoft/graphcodebert-base:
+401 Client Error: Unauthorized for url: https://huggingface.co/microsoft/graphcodebert-base/resolve/main/config.json (Request ID: Root=1-681d23a4-39e8c73e518c05240737a61c;81579632-2e45-47ae-80f3-c7afeaa635e4)
+
+Invalid credentials in Authorization header
+Traceback (most recent call last):
+  File "/Users/jonathanbotha/Projects/Flight Control/.venv/lib/python3.13/site-packages/huggingface_hub/utils/_http.py", line 409, in hf_raise_for_status
+    response.raise_for_status()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/jonathanbotha/Projects/Flight Control/.venv/lib/python3.13/site-packages/requests/models.py", line 1024, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 401 Client Error: Unauthorized for url: https://huggingface.co/microsoft/graphcodebert-base/resolve/main/config.json
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/jonathanbotha/Projects/Flight Control/.venv/lib/python3.13/site-packages/transformers/utils/hub.py", line 424, in cached_files
+    hf_hub_download(
+    ~~~~~~~~~~~~~~~^
+        path_or_repo_id,
+        ^^^^^^^^^^^^^^^^
+    ...<10 lines>...
+        local_files_only=local_files_only,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/jonathanbotha/Projects/Flight Control/.venv/lib/python3.13/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/Users/jonathanbotha/Projects/Flight Control/.venv/lib/python3.13/site-packages/huggingface_hub/file_download.py", line 1008, in hf_hub_download
+    return _hf_hub_download_to_cache_dir(
+        # Destination
+    ...<14 lines>...
+        force_download=force_download,
+    )
+  File "/Users/jonathanbotha/Projects/Flight Control/.venv/lib/python3.13/site-packages/huggingface_hub/file_download.py", line 1115, in _hf_hub_download_to_cache_dir
+    _raise_on_head_call_error(head_call_error, force_download, local_files_only)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jonathanbotha/Projects/Flight Control/.venv/lib/python3.13/site-packages/huggingface_hub/file_download.py", line 1643, in _raise_on_head_call_error
+    raise head_call_error
+  File "/Users/jonathanbotha/Projects/Flight Control/.venv/lib/python3.13/site-packages/huggingface_hub/file_download.py", line 1531, in _get_metadata_or_catch_error
+    metadata = get_hf_file_metadata(
+        url=url, proxies=proxies, timeout=etag_timeout, headers=headers, token=token
+    )
+  File "/Users/jonathanbotha/Projects/Flight Control/.venv/lib/python3.13/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/Users/jonathanbotha/Projects/Flight Control/.venv/lib/python3.13/site-packages/huggingface_hub/file_download.py", line 1448, in get_hf_file_metadata
+    r = _request_wrapper(
+        method="HEAD",
+    ...<5 lines>...
+        timeout=timeout,
+    )
+  File "/Users/jonathanbotha/Projects/Flight Control/.venv/lib/python3.13/site-packages/huggingface_hub/file_download.py", line 286, in _request_wrapper
+    response = _request_wrapper(
+        method=method,
+    ...<2 lines>...
+        **params,
+    )
+  File "/Users/jonathanbotha/Projects/Flight Control/.venv/lib/python3.13/site-packages/huggingface_hub/file_download.py", line 310, in _request_wrapper
+    hf_raise_for_status(response)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/jonathanbotha/Projects/Flight Control/.venv/lib/python3.13/site-packages/huggingface_hub/utils/_http.py", line 482, in hf_raise_for_status
+    raise _format(HfHubHTTPError, str(e), response) from e
+huggingface_hub.errors.HfHubHTTPError: 401 Client Error: Unauthorized for url: https://huggingface.co/microsoft/graphcodebert-base/resolve/main/config.json (Request ID: Root=1-681d23a4-39e8c73e518c05240737a61c;81579632-2e45-47ae-80f3-c7afeaa635e4)
+
+Invalid credentials in Authorization header
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/jonathanbotha/Projects/Flight Control/backend/app/services/model_service.py", line 46, in load_model
+    module = importlib.import_module(module_path)
+  File "/opt/homebrew/Cellar/python@3.13/3.13.3/Frameworks/Python.framework/Versions/3.13/lib/python3.13/importlib/__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/Users/jonathanbotha/Projects/Flight Control/ai-ml/models/graphcodebert/inference.py", line 11, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+  File "/Users/jonathanbotha/Projects/Flight Control/.venv/lib/python3.13/site-packages/transformers/models/auto/tokenization_auto.py", line 966, in from_pretrained
+    config = AutoConfig.from_pretrained(
+        pretrained_model_name_or_path, trust_remote_code=trust_remote_code, **kwargs
+    )
+  File "/Users/jonathanbotha/Projects/Flight Control/.venv/lib/python3.13/site-packages/transformers/models/auto/configuration_auto.py", line 1114, in from_pretrained
+    config_dict, unused_kwargs = PretrainedConfig.get_config_dict(pretrained_model_name_or_path, **kwargs)
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jonathanbotha/Projects/Flight Control/.venv/lib/python3.13/site-packages/transformers/configuration_utils.py", line 590, in get_config_dict
+    config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+                          ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jonathanbotha/Projects/Flight Control/.venv/lib/python3.13/site-packages/transformers/configuration_utils.py", line 649, in _get_config_dict
+    resolved_config_file = cached_file(
+        pretrained_model_name_or_path,
+    ...<10 lines>...
+        _commit_hash=commit_hash,
+    )
+  File "/Users/jonathanbotha/Projects/Flight Control/.venv/lib/python3.13/site-packages/transformers/utils/hub.py", line 266, in cached_file
+    file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+  File "/Users/jonathanbotha/Projects/Flight Control/.venv/lib/python3.13/site-packages/transformers/utils/hub.py", line 501, in cached_files
+    raise OSError(f"There was a specific connection error when trying to load {path_or_repo_id}:\n{e}")
+OSError: There was a specific connection error when trying to load microsoft/graphcodebert-base:
+401 Client Error: Unauthorized for url: https://huggingface.co/microsoft/graphcodebert-base/resolve/main/config.json (Request ID: Root=1-681d23a4-39e8c73e518c05240737a61c;81579632-2e45-47ae-80f3-c7afeaa635e4)
+
+Invalid credentials in Authorization header
+ERROR    analysis_service:analysis_service.py:41 Model import error: Failed to load model 'graphcodebert': There was a specific connection error when trying to load microsoft/graphcodebert-base:
+401 Client Error: Unauthorized for url: https://huggingface.co/microsoft/graphcodebert-base/resolve/main/config.json (Request ID: Root=1-681d23a4-39e8c73e518c05240737a61c;81579632-2e45-47ae-80f3-c7afeaa635e4)
+
+Invalid credentials in Authorization header
+_____________________________ test_feedback_valid ______________________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10fbd2d70>
+
+    def test_feedback_valid(monkeypatch):
+        client = TestClient(app)
+        # Mock S3 and GitHub integrations
+        monkeypatch.setenv("GITHUB_TOKEN", "dummy")
+        monkeypatch.setenv("GITHUB_REPO", "dummy/repo")
+        monkeypatch.setenv("S3_ENDPOINT", "http://localhost:9000")
+        monkeypatch.setenv("S3_ACCESS_KEY", "dummy")
+        monkeypatch.setenv("S3_SECRET_KEY", "dummy")
+        monkeypatch.setenv("S3_BUCKET", "test-bucket")
+        monkeypatch.setenv("S3_PUBLIC_URL", "http://localhost:9000")
+        with patch("app.services.feedback_service.upload_attachment_to_s3", return_value="http://localhost:9000/test-bucket/feedback/file.txt"), \
+             patch("app.services.feedback_service.create_github_issue", return_value=True):
+            response = client.post(
+                "/feedback",
+                data={
+                    "title": "Test Feedback",
+                    "description": "This is a test feedback description.",
+                    "severity": "high",
+                    "email": "user@example.com",
+                },
+                files={"attachment": ("file.txt", io.BytesIO(b"test"), "text/plain")},
+            )
+>           assert response.status_code == 201
+E           assert 500 == 201
+E            +  where 500 = <Response [500 Internal Server Error]>.status_code
+
+tests/backend/test_feedback.py:28: AssertionError
+------------------------------ Captured log call -------------------------------
+ERROR    feedback_service:feedback_service.py:28 S3 upload failed: Connection was closed before we received a valid response from endpoint URL: "http://localhost:9000/test-bucket/feedback/file.txt".
+____________________________ test_git_clone_invalid ____________________________
+
+    def test_git_clone_invalid():
+        client = TestClient(app)
+        response = client.post("/git/clone", json={"url": ""})
+>       assert response.status_code == 400
+E       assert 422 == 400
+E        +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+
+tests/backend/test_git.py:8: AssertionError
+=============================== warnings summary ===============================
+tests/backend/test_feedback.py::test_feedback_valid
+tests/backend/test_feedback.py::test_feedback_valid
+tests/backend/test_feedback.py::test_feedback_valid
+tests/backend/test_feedback.py::test_feedback_valid
+tests/backend/test_feedback.py::test_feedback_valid
+  /Users/jonathanbotha/Projects/Flight Control/.venv/lib/python3.13/site-packages/botocore/auth.py:425: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    datetime_now = datetime.datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================================ tests coverage ================================
+_______________ coverage: platform darwin, python 3.13.3-final-0 _______________
+
+Name                                       Stmts   Miss  Cover   Missing
+------------------------------------------------------------------------
+ai-ml/models/graphcodebert/inference.py       19     13    32%   4-5, 12-24
+backend/app/__init__.py                        0      0   100%
+backend/app/config.py                         48     32    33%   24-48, 52-55, 59-60, 64-69
+backend/app/database.py                        6      0   100%
+backend/app/main.py                           18      2    89%   19-20
+backend/app/models/__init__.py                 0      0   100%
+backend/app/models/code_smell.py              10     10     0%   1-12
+backend/app/models/user.py                    11      0   100%
+backend/app/routes/__init__.py                 7      0   100%
+backend/app/routes/analysis.py                16      2    88%   21-22
+backend/app/routes/auth.py                    92     61    34%   17-21, 24, 42-71, 75-113, 117-132
+backend/app/routes/feedback.py                34      8    76%   55-56, 65-78
+backend/app/routes/git.py                     14      5    64%   20-24
+backend/app/routes/health.py                   6      1    83%   14
+backend/app/routes/models.py                   8      0   100%
+backend/app/services/__init__.py               0      0   100%
+backend/app/services/analysis_service.py      26      8    69%   30-31, 34-36, 43-45
+backend/app/services/feedback_service.py      41     20    51%   24-26, 33-47, 51, 55
+backend/app/services/git_service.py           20     13    35%   21-33
+backend/app/services/model_service.py         19      3    84%   47-49
+------------------------------------------------------------------------
+TOTAL                                        395    178    55%
+=========================== short test summary info ============================
+FAILED tests/backend/test_analysis.py::test_analysis_valid - assert 400 == 200
+FAILED tests/backend/test_feedback.py::test_feedback_valid - assert 500 == 201
+FAILED tests/backend/test_git.py::test_git_clone_invalid - assert 422 == 400
+============= 3 failed, 7 passed, 1 skipped, 5 warnings in 10.43s ==============

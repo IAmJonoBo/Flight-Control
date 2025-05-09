@@ -1,0 +1,46 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: restrict-backend-ai
+spec:
+  podSelector:
+    matchLabels:
+      app: backend
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: frontend
+        - podSelector:
+            matchLabels:
+              app: backend
+        - podSelector:
+            matchLabels:
+              app: ai
+      ports:
+        - protocol: TCP
+          port: 8000
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: restrict-ai
+spec:
+  podSelector:
+    matchLabels:
+      app: ai
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: backend
+        - podSelector:
+            matchLabels:
+              app: ai
+      ports:
+        - protocol: TCP
+          port: 9000

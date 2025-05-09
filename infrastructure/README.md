@@ -2,6 +2,8 @@
 
 This guide covers deploying HashiCorp Vault and MinIO for both development and production environments.
 
+For security best practices, see the [Security Guide](../docs/src/docs/security.md).
+
 ---
 
 ## Vault Deployment
@@ -69,6 +71,4 @@ minio:
 - **Monitoring:** Use Prometheus/Grafana for health and usage metrics.
 - **Backups:** Regularly back up Vault and MinIO data volumes.
 
----
-
-For more, see the [Developer Guide](../docs/Developer%20Guide.md) and [Security Docs](../docs/src/docs/accessibility.md).
+For more, see the [Security Guide](../docs/src/docs/security.md) and [Accessibility Guide](../docs/src/docs/accessibility.md).

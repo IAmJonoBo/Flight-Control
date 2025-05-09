@@ -1,5 +1,6 @@
 module.exports = {
   docs: [
+    'README',
     'getting-started',
     'api-reference',
     'accessibility',

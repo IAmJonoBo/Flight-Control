@@ -15,7 +15,7 @@
 ```bash
 git clone https://github.com/your-organization/flight-control.git
 cd flight-control
-# See Developer Guide for full setup
+# See Getting Started for full setup
 ```
 
 - **Frontend:** `cd frontend && npm install && npm run dev`
@@ -44,25 +44,36 @@ flight-control/
 
 ## 📚 Documentation
 
-- [Developer Guide](./docs/Developer%20Guide.md)
-- [Technical Brief](./docs/Technical%20Brief.md)
-- [Scaffold & Architecture](./docs/Scaffold.md)
-- [API Reference (OpenAPI)](./docs/swagger/openapi.yaml)
-- [Live Docs (Docusaurus)](https://your-org.github.io/flight-control/)
+- [Vision & Overview](./VISION.md)
+- [Milestones & Phases](./MILESTONES.md)
+- [Key Deliverables](./DELIVERABLES.md)
+- [Review & Update Process](./REVIEW_PROCESS.md)
+- [Next Steps](./NEXT_STEPS.md)
+- [Enhancements & Suggestions](./ENHANCEMENTS.md)
+- [Getting Started](./docs/src/docs/getting-started.md)
+- [API Reference](./docs/src/docs/api-reference.md)
+- [Security Guide](./docs/src/docs/security.md)
+- [Accessibility Guide](./docs/src/docs/accessibility.md)
+- [Feedback & User Testing](./docs/src/docs/feedback.md)
+- [Pilot Deployment](./docs/src/docs/pilot-deployment.md)
+- [Infrastructure Guide](./infrastructure/README.md)
+- [Changelog](./CHANGELOG.md)
+- [Contributing](./CONTRIBUTING.md)
+- [Code of Conduct](./CODE_OF_CONDUCT.md)
 
 ---
 
-## 🧪 Testing & Coverage
+## 🧪 Testing
 - **Backend:** `cd backend && pytest`
 - **Frontend:** `cd frontend && npm run test`
 - **AI/ML:** `cd ai-ml && pytest`
-- **E2E:** See [Developer Guide](./docs/Developer%20Guide.md#e2e-testing)
+- **E2E:** See [Getting Started](./docs/src/docs/getting-started.md#run-all-tests)
 - **Coverage:** Enforced in CI (98%+ backend, 80%+ frontend)
 
 ---
 
 ## 🛡️ Security & Infrastructure
-- Secrets managed via Vault/Kubernetes Secrets
+- Secrets managed via Vault/Kubernetes Secrets ([Security Guide](./docs/src/docs/security.md))
 - Snyk/Trivy scans in CI
 - Prometheus/Grafana/Sentry for monitoring
 - See [Infrastructure Guide](./infrastructure/README.md)
@@ -70,9 +81,9 @@ flight-control/
 ---
 
 ## 🤝 Contributing
-- See [Developer Guide](./docs/Developer%20Guide.md#how-to-contribute)
+- See [Contributing](./CONTRIBUTING.md)
 - All PRs require tests, docs, and code review
-- Roadmap and future enhancements in [Developer Guide](./docs/Developer%20Guide.md#roadmap)
+- Roadmap and future enhancements in [Enhancements & Suggestions](./ENHANCEMENTS.md)
 
 ---
 
@@ -82,4 +93,4 @@ flight-control/
 
 ---
 
-> See the [Developer Guide](./docs/Developer%20Guide.md) for full onboarding, automation, and best practices.
+> See the [Getting Started](./docs/src/docs/getting-started.md) and [Vision & Overview](./VISION.md) for full onboarding, automation, and best practices.

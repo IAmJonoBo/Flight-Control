@@ -8,7 +8,7 @@
     "swizzle": "docusaurus swizzle"
   },
   "dependencies": {
-    "@docusaurus/core": "^2.4.0",
-    "@docusaurus/preset-classic": "^2.4.0"
+    "@docusaurus/core": "^3.0.0",
+    "@docusaurus/preset-classic": "^3.0.0"
   }
 }

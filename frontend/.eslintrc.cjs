@@ -4,22 +4,12 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2020,
     sourceType: 'module',
-    ecmaFeatures: {
-      jsx: true,
-    },
     project: './tsconfig.json',
-  },
-  settings: {
-    react: {
-      version: 'detect',
-      pragma: 'React',
-      jsxPragma: 'React',
-    },
   },
   env: {
     browser: true,
     es2021: true,
-    jest: true,
+    node: true,
   },
   plugins: [
     'react',
@@ -31,10 +21,13 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:@typescript-eslint/recommended-requiring-type-checking',
   ],
   rules: {
     // Add or override rules as needed
-    'react/react-in-jsx-scope': 'off',
+  },
+  settings: {
+    react: {
+      version: 'detect',
+    },
   },
 };

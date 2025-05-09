@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { cloneRepo } from '../services/gitService';
+import { useState } from "react";
+import { cloneRepo } from "../services/gitService";
 
 interface CloneResult {
   success: boolean;
@@ -18,10 +18,10 @@ export function useGit() {
       const res = await cloneRepo(url);
       setResult(res);
     } catch (err: unknown) {
-      let message = 'Git clone failed';
+      let message = "Git clone failed";
       if (err instanceof Error) {
         message = err.message;
-      } else if (typeof err === 'string') {
+      } else if (typeof err === "string") {
         message = err;
       }
       setError(message);

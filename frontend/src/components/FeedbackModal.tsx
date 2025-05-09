@@ -1,4 +1,5 @@
-import { useRef, useEffect, useState } from 'react';
+import * as React from "react";
+import { useRef, useEffect, useState } from "react";
 
 interface FeedbackModalProps {
   open: boolean;
@@ -7,10 +8,10 @@ interface FeedbackModalProps {
 }
 
 const SEVERITY_OPTIONS = [
-  { value: 'low', label: 'Low' },
-  { value: 'medium', label: 'Medium' },
-  { value: 'high', label: 'High' },
-  { value: 'critical', label: 'Critical' },
+  { value: "low", label: "Low" },
+  { value: "medium", label: "Medium" },
+  { value: "high", label: "High" },
+  { value: "critical", label: "Critical" },
 ];
 
 function FeedbackModal({ open, onClose, onSubmit }: FeedbackModalProps) {
@@ -24,11 +25,13 @@ function FeedbackModal({ open, onClose, onSubmit }: FeedbackModalProps) {
       (firstFieldRef.current as HTMLInputElement).focus();
     }
     function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === 'Escape') onClose();
+      if (e.key === "Escape") onClose();
       // Trap focus
-      if (e.key === 'Tab' && modalRef.current) {
-        const focusable = (modalRef.current as HTMLElement).querySelectorAll<HTMLElement>(
-          'input, textarea, select, button, [tabindex]:not([tabindex="-1"])'
+      if (e.key === "Tab" && modalRef.current) {
+        const focusable = (
+          modalRef.current as HTMLElement
+        ).querySelectorAll<HTMLElement>(
+          'input, textarea, select, button, [tabindex]:not([tabindex="-1"])',
         );
         const first = focusable[0];
         const last = focusable[focusable.length - 1];
@@ -42,23 +45,29 @@ function FeedbackModal({ open, onClose, onSubmit }: FeedbackModalProps) {
       }
     }
     if (open) {
-      document.addEventListener('keydown', handleKeyDown);
+      document.addEventListener("keydown", handleKeyDown);
     }
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [open, onClose]);
 
   const validate = (form: HTMLFormElement) => {
     const errs: { [key: string]: string } = {};
-    const title = (form.elements.namedItem('title') as HTMLInputElement)?.value.trim();
-    const description = (form.elements.namedItem('description') as HTMLTextAreaElement)?.value.trim();
-    if (!title) errs.title = 'Title is required.';
-    else if (title.length < 3 || title.length > 100) errs.title = 'Title must be 3-100 characters.';
-    if (!description) errs.description = 'Description is required.';
-    else if (description.length < 10 || description.length > 2000) errs.description = 'Description must be 10-2000 characters.';
+    const title = (
+      form.elements.namedItem("title") as HTMLInputElement
+    )?.value.trim();
+    const description = (
+      form.elements.namedItem("description") as HTMLTextAreaElement
+    )?.value.trim();
+    if (!title) errs.title = "Title is required.";
+    else if (title.length < 3 || title.length > 100)
+      errs.title = "Title must be 3-100 characters.";
+    if (!description) errs.description = "Description is required.";
+    else if (description.length < 10 || description.length > 2000)
+      errs.description = "Description must be 10-2000 characters.";
     return errs;
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
     const errs = validate(form);
@@ -67,14 +76,14 @@ function FeedbackModal({ open, onClose, onSubmit }: FeedbackModalProps) {
       // Focus first error field
       const firstError = Object.keys(errs)[0];
       const el = form[firstError];
-      if (el && typeof el.focus === 'function') el.focus();
+      if (el && typeof el.focus === "function") el.focus();
       return;
     }
     setLoading(true);
     try {
       await onSubmit(new FormData(form));
       setErrors({});
-    } catch (err) {
+    } catch {
       // Optionally handle global error
     } finally {
       setLoading(false);
@@ -89,7 +98,7 @@ function FeedbackModal({ open, onClose, onSubmit }: FeedbackModalProps) {
       aria-modal="true"
       aria-labelledby="feedback-title"
       className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm transition-opacity"
-      style={{ animation: 'fadeIn 0.2s' }}
+      style={{ animation: "fadeIn 0.2s" }}
     >
       <div
         ref={modalRef}
@@ -102,11 +111,17 @@ function FeedbackModal({ open, onClose, onSubmit }: FeedbackModalProps) {
         >
           <span aria-hidden="true">&times;</span>
         </button>
-        <h2 id="feedback-title" className="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+        <h2
+          id="feedback-title"
+          className="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100"
+        >
           Submit Feedback
         </h2>
         <form onSubmit={handleSubmit} noValidate>
-          <label htmlFor="title" className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-200">
+          <label
+            htmlFor="title"
+            className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-200"
+          >
             Title <span className="text-red-500">*</span>
           </label>
           <input
@@ -116,13 +131,24 @@ function FeedbackModal({ open, onClose, onSubmit }: FeedbackModalProps) {
             type="text"
             required
             aria-invalid={!!errors.title}
-            aria-describedby={errors.title ? 'title-error' : undefined}
-            className={`w-full mb-1 px-3 py-2 border ${errors.title ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'} rounded focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100`}
+            aria-describedby={errors.title ? "title-error" : undefined}
+            className={`w-full mb-1 px-3 py-2 border ${errors.title ? "border-red-500" : "border-gray-300 dark:border-gray-700"} rounded focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100`}
             aria-required="true"
             aria-label="Title"
           />
-          {errors.title && <div id="title-error" className="text-xs text-red-600 mb-2" role="alert">{errors.title}</div>}
-          <label htmlFor="description" className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-200">
+          {errors.title && (
+            <div
+              id="title-error"
+              className="text-xs text-red-600 mb-2"
+              role="alert"
+            >
+              {errors.title}
+            </div>
+          )}
+          <label
+            htmlFor="description"
+            className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-200"
+          >
             Description <span className="text-red-500">*</span>
           </label>
           <textarea
@@ -131,13 +157,26 @@ function FeedbackModal({ open, onClose, onSubmit }: FeedbackModalProps) {
             required
             rows={4}
             aria-invalid={!!errors.description}
-            aria-describedby={errors.description ? 'description-error' : undefined}
-            className={`w-full mb-1 px-3 py-2 border ${errors.description ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'} rounded focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100`}
+            aria-describedby={
+              errors.description ? "description-error" : undefined
+            }
+            className={`w-full mb-1 px-3 py-2 border ${errors.description ? "border-red-500" : "border-gray-300 dark:border-gray-700"} rounded focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100`}
             aria-required="true"
             aria-label="Description"
           />
-          {errors.description && <div id="description-error" className="text-xs text-red-600 mb-2" role="alert">{errors.description}</div>}
-          <label htmlFor="severity" className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-200">
+          {errors.description && (
+            <div
+              id="description-error"
+              className="text-xs text-red-600 mb-2"
+              role="alert"
+            >
+              {errors.description}
+            </div>
+          )}
+          <label
+            htmlFor="severity"
+            className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-200"
+          >
             Severity
           </label>
           <select
@@ -147,11 +186,16 @@ function FeedbackModal({ open, onClose, onSubmit }: FeedbackModalProps) {
             aria-label="Severity"
             defaultValue="medium"
           >
-            {SEVERITY_OPTIONS.map(opt => (
-              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            {SEVERITY_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
             ))}
           </select>
-          <label htmlFor="email" className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-200">
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-200"
+          >
             Email (optional)
           </label>
           <input
@@ -161,7 +205,10 @@ function FeedbackModal({ open, onClose, onSubmit }: FeedbackModalProps) {
             className="w-full mb-3 px-3 py-2 border border-gray-300 dark:border-gray-700 rounded focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
             aria-label="Email"
           />
-          <label htmlFor="attachment" className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-200">
+          <label
+            htmlFor="attachment"
+            className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-200"
+          >
             Attachment (optional)
           </label>
           <input
@@ -174,12 +221,14 @@ function FeedbackModal({ open, onClose, onSubmit }: FeedbackModalProps) {
           />
           <button
             type="submit"
-            className={`w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded shadow focus:outline-none focus:ring-2 focus:ring-blue-500 transition flex items-center justify-center ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
+            className={`w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded shadow focus:outline-none focus:ring-2 focus:ring-blue-500 transition flex items-center justify-center ${loading ? "opacity-70 cursor-not-allowed" : ""}`}
             disabled={loading}
             aria-busy={loading}
           >
-            {loading ? <span className="loader mr-2" aria-hidden="true"></span> : null}
-            {loading ? 'Submitting...' : 'Submit Feedback'}
+            {loading ? (
+              <span className="loader mr-2" aria-hidden="true"></span>
+            ) : null}
+            {loading ? "Submitting..." : "Submit Feedback"}
           </button>
         </form>
       </div>

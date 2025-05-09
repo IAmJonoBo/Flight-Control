@@ -20,7 +20,7 @@
     "monaco-languageclient": "^9.6.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router-dom": "^6.14.0",
+    "react-router-dom": "^7.0.0",
     "react-toastify": "^11.0.5",
     "tailwindcss": "^4.0.0",
     "vscode-ws-jsonrpc": "^3.4.0"

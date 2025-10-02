@@ -13,7 +13,7 @@
     "test:coverage": "jest --coverage"
   },
   "dependencies": {
-    "@sentry/react": "^9.17.0",
+    "@sentry/react": "^10.0.0",
     "@sentry/tracing": "^7.120.3",
     "axios": "^1.6.0",
     "monaco-editor": "^0.53.0",

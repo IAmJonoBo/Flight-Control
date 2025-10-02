@@ -38,7 +38,7 @@
     "@typescript-eslint/eslint-plugin": "^8.32.0",
     "@typescript-eslint/parser": "^8.32.0",
     "@vitejs/plugin-react": "^5.0.0",
-    "babel-jest": "^29.7.0",
+    "babel-jest": "^30.0.0",
     "babel-plugin-transform-import-meta": "^2.3.2",
     "babel-plugin-transform-vite-meta-env": "^1.0.3",
     "eslint": "^9.0.0",

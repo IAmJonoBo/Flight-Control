@@ -8,7 +8,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 22
       - run: cd frontend && npm install && npm run test
       # Frontend: Lint
       - run: cd frontend && npm run lint
@@ -21,7 +21,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: 3.10
+          python-version: 3.130
       - run: pip install -r backend/requirements.txt
       - run: python -m pytest backend/app/tests/
       - run: pip install -r ai-ml/requirements.txt

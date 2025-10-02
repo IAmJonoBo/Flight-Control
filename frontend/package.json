@@ -16,7 +16,7 @@
     "@sentry/react": "^9.17.0",
     "@sentry/tracing": "^7.120.3",
     "axios": "^1.6.0",
-    "monaco-editor": "^0.52.0",
+    "monaco-editor": "^0.53.0",
     "monaco-languageclient": "^9.6.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
